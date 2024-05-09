@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import simpledialog, messagebox, scrolledtext
+from tkinter import ttk, messagebox, scrolledtext
 import sqlite3
 import pyperclip
 import keyboard
@@ -67,7 +67,6 @@ def copy_to_clipboard():
 def show_window():
     root.deiconify()
 
-
 # Función para buscar códigos
 def search_codes():
     search_query = search_entry.get()
@@ -77,36 +76,38 @@ def search_codes():
 root = tk.Tk()
 root.title('Code Library')
 root.geometry("800x600")  # Ventana de tamaño ajustable
+style = ttk.Style()
+style.theme_use('clam')  # Usar un tema más moderno
 
-listbox = tk.Listbox(root)
+listbox = tk.Listbox(root, height=15)
 listbox.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 listbox.bind('<<ListboxSelect>>', select_code)
 
-right_frame = tk.Frame(root)
-right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+right_frame = ttk.Frame(root)
+right_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=10, pady=10)
 
-search_frame = tk.Frame(right_frame)
+search_frame = ttk.Frame(right_frame)
 search_frame.pack(fill=tk.X)
-search_entry = tk.Entry(search_frame)
-search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
-search_button = tk.Button(search_frame, text='Search', command=search_codes)
-search_button.pack(side=tk.LEFT)
+search_entry = ttk.Entry(search_frame)
+search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=10)
+search_button = ttk.Button(search_frame, text='Search', command=search_codes)
+search_button.pack(side=tk.LEFT, padx=10)
 
-title_entry = tk.Entry(right_frame)
-title_entry.pack(fill=tk.X)
-tags_entry = tk.Entry(right_frame)
-tags_entry.pack(fill=tk.X)
+title_entry = ttk.Entry(right_frame)
+title_entry.pack(fill=tk.X, padx=5, pady=5)
+tags_entry = ttk.Entry(right_frame)
+tags_entry.pack(fill=tk.X, padx=5, pady=5)
 code_text = scrolledtext.ScrolledText(right_frame)
-code_text.pack(fill=tk.BOTH, expand=True)
+code_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
 
-button_frame = tk.Frame(right_frame)
-button_frame.pack(fill=tk.X)
-save_button = tk.Button(button_frame, text='Save', command=lambda: save_code(title_entry.get(), tags_entry.get(), code_text.get('1.0', tk.END), int(listbox.get(listbox.curselection()[0]).split(':')[0]) if listbox.curselection() else None))
-save_button.pack(side=tk.LEFT)
-delete_button = tk.Button(button_frame, text='Delete', command=delete_code)
-delete_button.pack(side=tk.LEFT)
-copy_button = tk.Button(button_frame, text='Copy', command=copy_to_clipboard)
-copy_button.pack(side=tk.LEFT)
+button_frame = ttk.Frame(right_frame)
+button_frame.pack(fill=tk.X, padx=5, pady=5)
+save_button = ttk.Button(button_frame, text='Save', command=lambda: save_code(title_entry.get(), tags_entry.get(), code_text.get('1.0', tk.END), int(listbox.get(listbox.curselection()[0]).split(':')[0]) if listbox.curselection() else None))
+save_button.pack(side=tk.LEFT, padx=5)
+delete_button = ttk.Button(button_frame, text='Delete', command=delete_code)
+delete_button.pack(side=tk.LEFT, padx=5)
+copy_button = ttk.Button(button_frame, text='Copy', command=copy_to_clipboard)
+copy_button.pack(side=tk.LEFT, padx=5)
 
 load_codes()
 
